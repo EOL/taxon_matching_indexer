@@ -37,14 +37,25 @@ public class connection {
     public static void conSolr() throws IOException, SolrServerException {
         String zkHosts = "localhost:9983";
         CloudSolrClient client = new CloudSolrClient.Builder().withZkHost(zkHosts).build();
-        client.setDefaultCollection("collection7");
+        client.setDefaultCollection("indexer");
 
         //query Solr
         SolrQuery q = new SolrQuery("id:4");
         QueryResponse r = client.query(q);
 
 //update value
+        if(!r.getResults().isEmpty())
+        {
+            System.out.println("yes");
+            SolrDocument oldDoc = r.getResults().get(0);
+        }
+        else
+        {
+            System.out.println("no");
+        }
+
         SolrDocument oldDoc = r.getResults().get(0);
+
         SolrInputDocument newDoc = new SolrInputDocument();
 
         newDoc.addField("id", oldDoc.getFieldValue("id"));

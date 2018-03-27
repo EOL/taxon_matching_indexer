@@ -26,11 +26,7 @@ import java.util.ArrayList;
 public class Neo4jCommon {
 
     public ArrayList<JSONObject> getJSonObject(int[] generatedNodeIds)  {
-        ArrayList<JSONObject> returnedJSon=new ArrayList<>();
-
-        returnedJSon= httpConnect("http://localhost:8010/eol/neo4j/getNodesJson",generatedNodeIds);
-//       System.out.println(returnedJSonString);
-
+        ArrayList<JSONObject> returnedJSon = httpConnect("http://localhost:8010/eol/neo4j/getNodesJson",generatedNodeIds);
         return returnedJSon;
     }
 
