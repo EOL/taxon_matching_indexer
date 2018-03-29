@@ -132,9 +132,7 @@ public class SolrCommon extends Neo4jSolr {
                 }
 
                 client.add(doc);
-                // edit commit to commit automatic using hard commit every 10 mins(600000) and soft commit every 30 seconds (3000)in solrconfig.xml
-                // and stop client.commit call
-                client.commit();
+
 
             }
         }

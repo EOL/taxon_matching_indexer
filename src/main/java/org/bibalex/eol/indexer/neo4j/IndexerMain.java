@@ -3,7 +3,6 @@ package org.bibalex.eol.indexer.neo4j;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.bibalex.eol.indexer.solr.Neo4jSolr;
 import org.bibalex.eol.indexer.solr.SolrCommon;
-import solrIndexing.connection;
 
 import java.io.IOException;
 
