@@ -35,13 +35,14 @@ public class SolrCommon extends Neo4jSolr {
             String scientificName = getString(obj, "scientific name");
             String rank = getString(obj, "Rank");
             String canonicalName = getString(obj, "canonical name");
-            int generatedNodeId = getGenaratedNodeId(obj);
+            int generatedNodeId = getInt(obj,"generatedNodeId");
+            int pageId  = getInt(obj,"page id");
             boolean is_hybrid = isHybrid(obj);
             ArrayList<String> canonicalSynonyms = getStringArray(obj, "canonical synonyms");
             ArrayList<String> otherCanonicalSynonyms = getStringArray(obj, "other canonical synonyms");
             ArrayList<String> synonyms = getStringArray(obj, "synonyms");
             ArrayList<String> otherSynonyms = getStringArray(obj, "other synonyms");
-            ArrayList<String> childrenNames = getStringArray(obj, "children names");
+            ArrayList<String> childrenIds = getStringArray(obj, "children IDS");
             ArrayList<Integer> ancestorsIds = getIntegerArray(obj, "ancestors IDS");
 
             //if-cond  to make sure that object not include id only
@@ -63,6 +64,13 @@ public class SolrCommon extends Neo4jSolr {
                         Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
                         fieldModifier.put("set", rank);
                         doc.addField("rank", fieldModifier);
+                    }
+
+                    if(pageId!= -1)
+                    {
+                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
+                        fieldModifier.put("set", pageId);
+                        doc.addField("page_id", fieldModifier);
                     }
 
                     if (canonicalName != null) {
@@ -104,10 +112,10 @@ public class SolrCommon extends Neo4jSolr {
                         doc.addField("other_synonyms", fieldModifier);
                     }
 
-                    if (childrenNames.size() > 0) {
+                    if (childrenIds.size() > 0) {
                         Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", childrenNames);
-                        doc.addField("children_names", fieldModifier);
+                        fieldModifier.put("set", childrenIds);
+                        doc.addField("children_ids", fieldModifier);
                     }
 
                     if (ancestorsIds.size() > 0) {
@@ -118,15 +126,16 @@ public class SolrCommon extends Neo4jSolr {
 
                 } else {
                     doc.addField("id", generatedNodeId);
-                    doc.addField("scientific_name", scientificName);
-                    doc.addField("rank", rank);
-                    doc.addField("canonical_name", canonicalName);
-                    doc.addField("is_hybrid", is_hybrid);
+                    if(pageId!=-1) { doc.addField("page_id",pageId);}
+                    if (scientificName!=null) {doc.addField("scientific_name", scientificName);}
+                    if(rank!= null){doc.addField("rank", rank);}
+                    if(canonicalName!=null){doc.addField("canonical_name", canonicalName);}
+                    if(String.valueOf(is_hybrid)!=null){doc.addField("is_hybrid", is_hybrid);}
                     doc.addField("canonical_synonyms", canonicalSynonyms);
                     doc.addField("other_canonical_synonyms", otherCanonicalSynonyms);
                     doc.addField("synonyms", synonyms);
                     doc.addField("other_synonyms", otherSynonyms);
-                    doc.addField("children_names", childrenNames);
+                    doc.addField("children_ids", childrenIds);
                     doc.addField("ancestors_ids", ancestorsIds);
 
                 }

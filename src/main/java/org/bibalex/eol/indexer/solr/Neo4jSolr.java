@@ -12,10 +12,10 @@ public class Neo4jSolr  {
     }
 
 
-    public int getGenaratedNodeId (JSONObject obj)
+    public int getInt (JSONObject obj, String key)
     {
-        int generatedNodeId = (Integer)obj.get("generatedNodeId");
-        return generatedNodeId;
+        int value = (Integer)obj.get(key);
+        return value;
     }
 
     public boolean isHybrid (JSONObject obj)
