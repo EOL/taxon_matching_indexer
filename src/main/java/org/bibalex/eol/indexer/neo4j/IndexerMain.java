@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class IndexerMain {
     public static void main(String args[]) throws IOException, SolrServerException {
-        int[] generatedNodeIds = {1,2,3,4,9};
+        int[] generatedNodeIds = {1,2,3,4,9,16};
         SolrCommon test = new SolrCommon();
         test.addDocument(generatedNodeIds);
 //        connection test = new connection();

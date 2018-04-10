@@ -54,13 +54,16 @@ public class SolrCommon extends Neo4jSolr {
                     SolrDocument oldDoc = r.getResults().get(0);
                     doc.addField("id", generatedNodeId);
 
-                    if (scientificName != null) {
+                    //scientificName is empty string canonical will be empty string also and wo,t be inserted in  solr
+                    //pageId is -1 won't be inserted in solr
+                    //rank if empty string won't be inserted in solr
+                    if (!scientificName.equals("")) {
                         Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
                         fieldModifier.put("set", scientificName);
                         doc.addField("scientific_name", fieldModifier);
                     }
 
-                    if (rank != null) {
+                    if (!rank.equals("")) {
                         Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
                         fieldModifier.put("set", rank);
                         doc.addField("rank", fieldModifier);
@@ -73,7 +76,7 @@ public class SolrCommon extends Neo4jSolr {
                         doc.addField("page_id", fieldModifier);
                     }
 
-                    if (canonicalName != null) {
+                    if (!canonicalName.equals("")) {
                         Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
                         fieldModifier.put("set", canonicalName);
                         doc.addField("canonical_name", fieldModifier);
@@ -127,9 +130,9 @@ public class SolrCommon extends Neo4jSolr {
                 } else {
                     doc.addField("id", generatedNodeId);
                     if(pageId!=-1) { doc.addField("page_id",pageId);}
-                    if (scientificName!=null) {doc.addField("scientific_name", scientificName);}
-                    if(rank!= null){doc.addField("rank", rank);}
-                    if(canonicalName!=null){doc.addField("canonical_name", canonicalName);}
+                    if (!scientificName.equals("")) {doc.addField("scientific_name", scientificName);}
+                    if(!rank.equals("")){doc.addField("rank", rank);}
+                    if(!canonicalName.equals("")){doc.addField("canonical_name", canonicalName);}
                     if(String.valueOf(is_hybrid)!=null){doc.addField("is_hybrid", is_hybrid);}
                     doc.addField("canonical_synonyms", canonicalSynonyms);
                     doc.addField("other_canonical_synonyms", otherCanonicalSynonyms);
