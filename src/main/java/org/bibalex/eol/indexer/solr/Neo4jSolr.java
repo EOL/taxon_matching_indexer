@@ -2,6 +2,9 @@ package org.bibalex.eol.indexer.solr;
 
 import org.json.simple.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class Neo4jSolr  {
 
@@ -10,7 +13,6 @@ public class Neo4jSolr  {
         String value = String.valueOf(obj.get(key));
         return  value;
     }
-
 
     public int getInt (JSONObject obj, String key)
     {
@@ -34,6 +36,13 @@ public class Neo4jSolr  {
     {
         ArrayList<Integer> value = (ArrayList<Integer>) obj.get(key);
         return value;
+    }
+
+    public Map<String, Object> mapToDoc(Object name)
+    {
+        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
+        fieldModifier.put("set", name);
+        return fieldModifier;
     }
 
 }

@@ -21,10 +21,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 public class Neo4jCommon {
-
+    java.util.logging.Logger logger =  Logger.getLogger("Neo4jCommon");
     public ArrayList<JSONObject> getJSonObject(int[] generatedNodeIds)  {
         ArrayList<JSONObject> returnedJSon = httpConnect("http://localhost:8010/eol/neo4j/getNodesJson",generatedNodeIds);
         return returnedJSon;
@@ -43,6 +44,7 @@ public class Neo4jCommon {
         ResponseEntity<ArrayList<JSONObject>> rateResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity,new ParameterizedTypeReference<ArrayList<JSONObject>>() {});
 
         System.out.println(rateResponse.getBody());
+        logger.info("returned neo4j response "+rateResponse.getBody());
         return rateResponse.getBody();
 
 

@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class SolrCommon extends Neo4jSolr {
     CloudSolrClient client = null;
+    java.util.logging.Logger logger =  Logger.getLogger("SolrCommon");
 
-
-    public CloudSolrClient openConnection(String collectionName)
-    {
+    public CloudSolrClient openConnection(String collectionName) {
         String zkHosts = "localhost:9983";
         client = new CloudSolrClient.Builder().withZkHost(zkHosts).build();
         client.setDefaultCollection(collectionName);
@@ -57,74 +57,71 @@ public class SolrCommon extends Neo4jSolr {
                     //scientificName is empty string canonical will be empty string also and wo,t be inserted in  solr
                     //pageId is -1 won't be inserted in solr
                     //rank if empty string won't be inserted in solr
+                    //update other canonical synonyms and other synonyms include adding old one too
+                    //update canonical synonyms and synonyms not include adding old one
                     if (!scientificName.equals("")) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", scientificName);
-                        doc.addField("scientific_name", fieldModifier);
+                        doc.addField("scientific_name", mapToDoc(scientificName));
+                        logger.info("updated scientific name: "+scientificName+" to node id: "+generatedNodeId);
                     }
 
                     if (!rank.equals("")) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", rank);
-                        doc.addField("rank", fieldModifier);
+                        doc.addField("rank", mapToDoc(rank));
+                        logger.info("updated rank: "+rank+" to node id: "+generatedNodeId);
                     }
 
-                    if(pageId!= -1)
-                    {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", pageId);
-                        doc.addField("page_id", fieldModifier);
+                    if(pageId!= -1) {
+                        doc.addField("page_id", mapToDoc(pageId));
+                        logger.info("updated page id: "+pageId+" to node id: "+generatedNodeId);
                     }
 
                     if (!canonicalName.equals("")) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", canonicalName);
-                        doc.addField("canonical_name", fieldModifier);
+                        doc.addField("canonical_name", mapToDoc(canonicalName));
+                        logger.info("updated canonical name: "+canonicalName+" to node id: "+generatedNodeId);
                     }
 
                     if (String.valueOf(is_hybrid) != null) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", is_hybrid);
-                        doc.addField("is_hybrid", fieldModifier);
+                        doc.addField("is_hybrid", is_hybrid);
+                        logger.info("updated is hybrid: "+is_hybrid+" to node id: "+generatedNodeId);
                     }
 
                     if (canonicalSynonyms.size() > 0) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", canonicalSynonyms);
-                        doc.addField("canonical_synonyms", fieldModifier);
+                        doc.addField("canonical_synonyms", mapToDoc(canonicalSynonyms));
+                        logger.info("updated canonical synonyms: "+canonicalSynonyms+" to node id: "+generatedNodeId);
                     }
 
                     if (otherCanonicalSynonyms.size() > 0) {
-                        ArrayList oldOtherCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues("other_canonical_synonyms");
-                        otherCanonicalSynonyms.addAll(oldOtherCanonicalSynonyms);
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", otherCanonicalSynonyms);
-                        doc.addField("other_canonical_synonyms", fieldModifier);
+                        if(oldDoc.getFieldValues("other_canonical_synonyms")!=null)
+                        {   ArrayList oldOtherCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues("other_canonical_synonyms");
+                            otherCanonicalSynonyms.addAll(oldOtherCanonicalSynonyms);
+                            logger.info("old other canonical synonyms: "+oldOtherCanonicalSynonyms+" to node id: "+generatedNodeId);}
+                        doc.addField("other_canonical_synonyms", mapToDoc(otherCanonicalSynonyms));
+                        logger.info("updated other canonical synonyms: "+otherCanonicalSynonyms+" to node id: "+generatedNodeId);
                     }
+
                     if (synonyms.size() > 0) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", synonyms);
-                        doc.addField("synonyms", fieldModifier);
+                        doc.addField("synonyms", mapToDoc(synonyms));
+                        logger.info("updated synonyms: "+synonyms+" to node id: "+generatedNodeId);
 
                     }
+
                     if (otherSynonyms.size() > 0) {
-                        ArrayList oldOtherSynonyms = (ArrayList) oldDoc.getFieldValues("other_synonyms");
-                        otherSynonyms.addAll(oldOtherSynonyms);
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", otherSynonyms);
-                        doc.addField("other_synonyms", fieldModifier);
+                        if(oldDoc.getFieldValues("other_synonyms")!=null) {
+                            ArrayList oldOtherSynonyms = (ArrayList) oldDoc.getFieldValues("other_synonyms");
+                            otherSynonyms.addAll(oldOtherSynonyms);
+                            logger.info("old other synonyms: "+oldOtherSynonyms+" to node id: "+generatedNodeId);
+                        }
+                        doc.addField("other_synonyms", mapToDoc(otherSynonyms));
+                        logger.info("updated other synonyms: "+otherSynonyms+" to node id: "+generatedNodeId);
                     }
 
                     if (childrenIds.size() > 0) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", childrenIds);
-                        doc.addField("children_ids", fieldModifier);
+                        doc.addField("children_ids", mapToDoc(childrenIds));
+                        logger.info("updated children ids: "+childrenIds+" to node id: "+generatedNodeId);
                     }
 
                     if (ancestorsIds.size() > 0) {
-                        Map<String, Object> fieldModifier = new HashMap<String, Object>(1);
-                        fieldModifier.put("set", ancestorsIds);
-                        doc.addField("ancestors_ids", fieldModifier);
+                        doc.addField("ancestors_ids", mapToDoc(ancestorsIds));
+                        logger.info("updated ancestors ids: "+ancestorsIds+" to node id: "+generatedNodeId);
                     }
 
                 } else {
@@ -140,17 +137,15 @@ public class SolrCommon extends Neo4jSolr {
                     doc.addField("other_synonyms", otherSynonyms);
                     doc.addField("children_ids", childrenIds);
                     doc.addField("ancestors_ids", ancestorsIds);
+                    logger.info("new added doc: "+doc);
 
                 }
 
                 client.add(doc);
-
-
             }
         }
          client.close();
 
     }
-
 
 }
