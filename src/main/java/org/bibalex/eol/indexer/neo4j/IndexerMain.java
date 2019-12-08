@@ -8,9 +8,25 @@ import java.io.IOException;
 
 public class IndexerMain {
     public static void main(String args[]) throws IOException, SolrServerException {
-        int[] generatedNodeIds = {1,2,3,4,9,16};
-        SolrCommon test = new SolrCommon();
-        test.addDocument(generatedNodeIds);
+        int global = 1; 
+	while(global < 11) {
+    		int[] generatedNodeIds = new int[20000];
+    		for (int i = 0; i < generatedNodeIds.length; i++) {
+        		generatedNodeIds[i] = global;
+        		global++;
+        		if (global==11)
+           			break;
+    		}
+    		SolrCommon test = new SolrCommon();
+    		test.addDocument(generatedNodeIds);
+	}
+
+	//int[] generatedNodeIds = {1703};
+	//int[] generatedNodeIds = new int[2724671];
+	//for(int i=0; i< generatedNodeIds.length; i++)
+    	//	generatedNodeIds[i]=i+1;
+        //SolrCommon test = new SolrCommon();
+        //test.addDocument(generatedNodeIds);
 //        connection test = new connection();
 //        connection.conSolr();
 //        ArrayList<Integer> generatedNodeIds= new ArrayList<>();

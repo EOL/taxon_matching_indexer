@@ -23,6 +23,21 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.bibalex.eol.indexer.neo4j.IndexerMain</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -72,7 +87,7 @@
         <dependency>
             <groupId>org.neo4j.driver</groupId>
             <artifactId>neo4j-java-driver</artifactId>
-            <version>LATEST</version>
+            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
