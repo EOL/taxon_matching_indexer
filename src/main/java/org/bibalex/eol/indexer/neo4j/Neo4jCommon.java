@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.bibalex.eol.indexer.utils.Constants;
 import org.json.simple.JSONObject;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
 public class Neo4jCommon {
     java.util.logging.Logger logger =  Logger.getLogger("Neo4jCommon");
     public ArrayList<JSONObject> getJSonObject(int[] generatedNodeIds)  {
-        ArrayList<JSONObject> returnedJSon = httpConnect("http://localhost:8010/eol/neo4j/getNodesJson",generatedNodeIds);
+        ArrayList<JSONObject> returnedJSon = httpConnect(Constants.GET_NODES_JSON,generatedNodeIds);
         return returnedJSon;
     }
 
@@ -44,7 +45,7 @@ public class Neo4jCommon {
         ResponseEntity<ArrayList<JSONObject>> rateResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity,new ParameterizedTypeReference<ArrayList<JSONObject>>() {});
 
         System.out.println(rateResponse.getBody());
-        logger.info("returned neo4j response "+rateResponse.getBody());
+        logger.info("returned neo4j response " + rateResponse.getBody());
         return rateResponse.getBody();
 
 

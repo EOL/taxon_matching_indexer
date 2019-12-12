@@ -1,7 +1,6 @@
 package org.bibalex.eol.indexer.neo4j;
 
 import org.apache.solr.client.solrj.SolrServerException;
-import org.bibalex.eol.indexer.solr.Neo4jSolr;
 import org.bibalex.eol.indexer.solr.SolrCommon;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class IndexerMain {
            			break;
     		}
     		SolrCommon test = new SolrCommon();
-    		test.addDocument(generatedNodeIds);
+    		test.addDocuments(generatedNodeIds);
 	}
 
 	//int[] generatedNodeIds = {1703};
